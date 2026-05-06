@@ -25,6 +25,43 @@ const globalCSS = `
   input,select,textarea{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:2px;font-family:'Poppins',sans-serif;font-size:14px;background:#fff;color:${C.dark};outline:none;transition:border .2s;}
   input:focus,select:focus,textarea:focus{border-color:${C.gold};}
   label{font-size:13px;font-weight:500;color:${C.dark};display:block;margin-bottom:6px;}
+
+
+  /* Responsive CSS */
+  @media (max-width: 768px) {
+    body { font-size: 14px; }
+    h1 { font-size: 36px !important; line-height: 1.2; }
+    h2 { font-size: 28px !important; }
+    h3 { font-size: 22px !important; }
+    h4 { font-size: 18px !important; }
+    
+    .desktop-only { display: none !important; }
+    .mobile-only { display: flex !important; }
+    
+    .section-pad { padding-left: 16px !important; padding-right: 16px !important; padding-top: 40px !important; padding-bottom: 40px !important; }
+    .hero-pad { padding-left: 16px !important; padding-right: 16px !important; padding-top: 100px !important; padding-bottom: 40px !important; }
+    
+    /* Grid overrides */
+    .responsive-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+    .footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+    
+    /* Stats */
+    .stats-flex { flex-direction: column !important; gap: 16px !important; margin-top: 32px !important; }
+  }
+  .mobile-only { display: none; }
+  
+  .mobile-menu {
+    position: fixed; top: 64px; left: 0; right: 0; background: #F8F1E9;
+    padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-bottom: 2px solid #D4AF37;
+    z-index: 999; display: flex; flex-direction: column; gap: 16px;
+    transform: translateY(-150%); transition: transform 0.3s ease; opacity: 0; pointer-events: none;
+  }
+  .mobile-menu.open {
+    transform: translateY(0); opacity: 1; pointer-events: auto;
+  }
+  .menu-btn {
+    background: none; border: none; font-size: 24px; color: #9C2A2A; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
 `;
 
 const NAV_LINKS = ["Home","About","Services","Gallery","Contact"];
@@ -146,7 +183,7 @@ function Navbar({ page, setPage }) {
           <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: C.maroon, letterSpacing: 1 }}>Opulent Aura</div>
           <div style={{ fontSize: 9, letterSpacing: 4, color: C.gold, fontFamily: "'Poppins', sans-serif", marginTop: -2 }}>LUXURY SALON & SPA</div>
         </div>
-        <div style={{ display: "flex", gap: 28, alignItems: "center" }}>
+        <div className="desktop-only" style={{ display: "flex", gap: 28, alignItems: "center" }}>
           {NAV_LINKS.map(l => (
             <button key={l} onClick={() => { setPage(l); setMenuOpen(false); }} style={{
               background: "none", border: "none", cursor: "pointer",
@@ -160,6 +197,22 @@ function Navbar({ page, setPage }) {
             Book Now
           </button>
         </div>
+        <button className="mobile-only menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </button>
+      </div>
+      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+        {NAV_LINKS.map(l => (
+          <button key={l} onClick={() => { setPage(l); setMenuOpen(false); }} style={{
+            background: "none", border: "none", cursor: "pointer",
+            fontFamily: "'Poppins', sans-serif", fontSize: 16, fontWeight: 500,
+            color: page === l ? C.maroon : C.dark, letterSpacing: 1,
+            padding: "12px 0", textAlign: "left", borderBottom: `1px solid ${C.beige}`
+          }}>{l}</button>
+        ))}
+        <button className="btn-primary" style={{ fontSize: 14, padding: "12px", marginTop: 16, width: "100%" }} onClick={() => { setPage("Contact"); setMenuOpen(false); }}>
+          Book Appointment
+        </button>
       </div>
     </nav>
   );
@@ -191,7 +244,7 @@ function CategoryCarousel({ setPage }) {
   };
 
   return (
-    <div style={{ padding: "80px 24px", background: C.beige, position: "relative" }}>
+    <div className="section-pad" style={{ padding: "80px 24px", background: C.beige, position: "relative" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40, flexWrap: "wrap", gap: 16 }}>
           <div>
@@ -236,10 +289,9 @@ function HomePage({ setPage }) {
   return (
     <div>
       {/* Hero */}
-      <div style={{
-        minHeight: "100vh", background: `linear-gradient(160deg, #1a0a0a 0%, #3a1010 40%, #5a1a1a 70%, #2C1010 100%)`,
+      <div className="hero-pad" style={{ minHeight: "100vh", background: `linear-gradient(160deg, #1a0a0a 0%, #3a1010 40%, #5a1a1a 70%, #2C1010 100%)`,
         display: "flex", alignItems: "center", justifyContent: "center",
-        position: "relative", overflow: "hidden", padding: "120px 24px 60px"
+        position: "relative", overflow: "hidden", padding: "120px 24px 60px" /* hero */
       }}>
         <div style={{
           position: "absolute", inset: 0, opacity: .06,
@@ -258,7 +310,7 @@ function HomePage({ setPage }) {
             <button className="btn-primary" style={{ fontSize: 15 }} onClick={() => setPage("Contact")}>Book Appointment</button>
             <button className="btn-outline" style={{ fontSize: 15 }} onClick={() => setPage("Services")}>Explore Services</button>
           </div>
-          <div style={{ display: "flex", gap: 32, justifyContent: "center", marginTop: 60, flexWrap: "wrap" }}>
+          <div className="stats-flex" style={{ display: "flex", gap: 32, justifyContent: "center", marginTop: 60, flexWrap: "wrap" }}>
             {STATS.map(s => (
               <div key={s.label} style={{ textAlign: "center" }}>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: C.gold, fontWeight: 700 }}>{s.val}</div>
@@ -273,7 +325,7 @@ function HomePage({ setPage }) {
       <CategoryCarousel setPage={setPage} />
 
       {/* Services */}
-      <div style={{ padding: "80px 24px", background: C.ivory }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.ivory }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <div className="section-tag">Our Expertise</div>
@@ -313,7 +365,7 @@ function HomePage({ setPage }) {
       </div>
 
       {/* Why Choose Us */}
-      <div style={{ padding: "80px 24px", background: C.dark }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.dark }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <div className="section-tag">Why Opulent Aura</div>
@@ -347,7 +399,7 @@ function HomePage({ setPage }) {
       </div>
 
       {/* Testimonials */}
-      <div style={{ padding: "80px 24px", background: C.beige }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.beige }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <div className="section-tag">Client Stories</div>
@@ -377,7 +429,7 @@ function HomePage({ setPage }) {
       </div>
 
       {/* CTA Banner */}
-      <div style={{ padding: "80px 24px", background: C.maroon, textAlign: "center" }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.maroon, textAlign: "center" }}>
         <div style={{ maxWidth: 700, margin: "0 auto" }}>
           <div className="section-tag" style={{ color: C.gold }}>Limited Slots Available</div>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, color: "#fff", margin: "16px 0 20px" }}>
@@ -404,7 +456,7 @@ function AboutPage() {
   return (
     <div style={{ paddingTop: 80 }}>
       {/* Hero */}
-      <div style={{ padding: "80px 24px", background: `linear-gradient(135deg, ${C.dark} 0%, #4a1a1a 100%)`, textAlign: "center" }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: `linear-gradient(135deg, ${C.dark} 0%, #4a1a1a 100%)`, textAlign: "center" }}>
         <div className="section-tag" style={{ color: C.gold }}>Our Story</div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 52, color: "#fff", margin: "16px 0 20px" }}>Where Style Meets Luxury</h1>
         <p style={{ color: "#C8B8A8", fontSize: 17, maxWidth: 600, margin: "0 auto", lineHeight: 1.8 }}>
@@ -425,7 +477,7 @@ function AboutPage() {
       </div>
 
       {/* Story */}
-      <div style={{ padding: "80px 24px", background: C.ivory }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.ivory }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
           <div>
             <div className="section-tag">Our Journey</div>
@@ -462,7 +514,7 @@ function AboutPage() {
       </div>
 
       {/* Team */}
-      <div style={{ padding: "80px 24px", background: C.beige }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.beige }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <div className="section-tag">Our Experts</div>
@@ -504,7 +556,7 @@ function ServicesPage({ setPage }) {
   const [activeTab, setActiveTab] = useState(Object.keys(ALL_SERVICES)[0]);
   return (
     <div style={{ paddingTop: 80 }}>
-      <div style={{ padding: "60px 24px 40px", background: C.dark, textAlign: "center" }}>
+      <div className="section-pad" style={{ padding: "60px 24px 40px", background: C.dark, textAlign: "center" }}>
         <div className="section-tag" style={{ color: C.gold }}>Complete Menu</div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 52, color: "#fff", margin: "16px 0 16px" }}>Our Services</h1>
         <p style={{ color: "#C8B8A8", fontSize: 16, maxWidth: 500, margin: "0 auto" }}>Premium treatments tailored for every individual — men, women, and brides.</p>
@@ -524,7 +576,7 @@ function ServicesPage({ setPage }) {
         </div>
       </div>
 
-      <div style={{ padding: "60px 24px", background: C.ivory }}>
+      <div className="section-pad" style={{ padding: "60px 24px", background: C.ivory }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px,1fr))", gap: 24 }}>
             {ALL_SERVICES[activeTab].map(s => (
@@ -566,7 +618,7 @@ function ServicesPage({ setPage }) {
       </div>
 
       {/* Packages */}
-      <div style={{ padding: "80px 24px", background: C.beige }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.beige }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div className="section-tag">Best Value</div>
@@ -610,7 +662,7 @@ function GalleryPage() {
   const filtered = filter === "All" ? GALLERY_ITEMS : GALLERY_ITEMS.filter(g => g.cat === filter);
   return (
     <div style={{ paddingTop: 80 }}>
-      <div style={{ padding: "60px 24px", background: C.dark, textAlign: "center" }}>
+      <div className="section-pad" style={{ padding: "60px 24px", background: C.dark, textAlign: "center" }}>
         <div className="section-tag" style={{ color: C.gold }}>Transformations</div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 52, color: "#fff", margin: "16px 0" }}>Our Gallery</h1>
         <p style={{ color: "#C8B8A8" }}>Real transformations. Real confidence. Real beauty.</p>
@@ -648,7 +700,7 @@ function GalleryPage() {
       </div>
 
       {/* Before & After */}
-      <div style={{ padding: "80px 24px", background: C.beige }}>
+      <div className="section-pad" style={{ padding: "80px 24px", background: C.beige }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div className="section-tag">Proof of Excellence</div>
@@ -721,13 +773,13 @@ function ContactPage() {
   );
   return (
     <div style={{ paddingTop: 80 }}>
-      <div style={{ padding: "60px 24px", background: C.dark, textAlign: "center" }}>
+      <div className="section-pad" style={{ padding: "60px 24px", background: C.dark, textAlign: "center" }}>
         <div className="section-tag" style={{ color: C.gold }}>Get In Touch</div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 52, color: "#fff", margin: "16px 0" }}>Book Your Appointment</h1>
         <p style={{ color: "#C8B8A8" }}>Premium experience, 2-minute booking. Instant confirmation.</p>
       </div>
 
-      <div style={{ padding: "60px 24px", background: C.ivory }}>
+      <div className="section-pad" style={{ padding: "60px 24px", background: C.ivory }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1.5fr", gap: 60, alignItems: "start" }}>
           {/* Contact Info */}
           <div>
@@ -834,7 +886,7 @@ function ContactPage() {
                 <div style={{ display: "grid", gap: 16 }}>
                   <div><label>Preferred Date *</label><input type="date" value={form.date} onChange={e => upd("date", e.target.value)} min={new Date().toISOString().split("T")[0]} /></div>
                   <div><label>Preferred Time Slot *</label>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginTop: 4 }}>
+                    <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginTop: 4 }}>
                       {TIMES.map(t => (
                         <button key={t} onClick={() => upd("time", t)} style={{
                           padding: "8px 4px", border: `1px solid ${form.time === t ? C.gold : "#ddd"}`,
