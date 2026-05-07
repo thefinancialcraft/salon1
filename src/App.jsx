@@ -180,7 +180,7 @@ function Navbar({ page, setPage }) {
     }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         <div style={{ cursor: "pointer" }} onClick={() => setPage("Home")}>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: C.maroon, letterSpacing: 1 }}>Opulent Aura</div>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: C.maroon, letterSpacing: 1 }}>Glow Heaven</div>
           <div style={{ fontSize: 9, letterSpacing: 4, color: C.gold, fontFamily: "'Poppins', sans-serif", marginTop: -2 }}>LUXURY SALON & SPA</div>
         </div>
         <div className="desktop-only" style={{ display: "flex", gap: 28, alignItems: "center" }}>
